@@ -1,8 +1,10 @@
+require('dotenv').config(); 
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
-// const { testConnection } = require('./database');
-// const routes = require('./routes');
-require('dotenv').config(); 
+const { testConnection, pool } = require('./database');
+const routes = require('./routes');
+
 
 // Create the Express app (like building a house)
 const app = express();
@@ -28,10 +30,8 @@ app.use((req, res, next) => {
 
 
 // ROUTES - All  API endpoints
-
-
 // Use all routes from routes.js
-// app.use('/', routes);
+app.use('/', routes);
 
 
 // 404 handler - When someone tries to access a route that doesn't exist
@@ -50,6 +50,61 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, ()=>{
-    console.log(`server running on port ${PORT}`)
-})
+// Global error handler - Catches any unexpected errors
+app.use((err, req, res, next) => {
+  console.error('❌ Unexpected error:', err);
+  res.status(500).json({ 
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
+});
+
+// START SERVER
+
+async function startServer() {
+  try {
+    // First, test if database connection works
+    console.log('🔄 Testing database connection...');
+    await testConnection();
+    
+    //Then start listening for requests
+    app.listen(PORT, () => {
+      console.log(`
+        Country Currency API Server is Running! 
+        Local:    http://localhost:${PORT}                    
+        Network:  http://0.0.0.0:${PORT}
+      `);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    console.error('Please check your database connection settings in .env file');
+    process.exit(1); // Exit if we can't connect to database
+  }
+}
+
+// script to run sql server
+async function runSetup() {
+  const sql = fs.readFileSync('setup.sql', 'utf8');
+  const statements = sql.split(';').filter(s => s.trim());
+  
+  for (const statement of statements) {
+    if (statement.trim()) {
+      await pool.query(statement);
+    }
+  }
+  console.log('Setup complete!');
+}
+//Handle graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\n Shutting down gracefully...');
+  process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+  console.log('\n Shutting down gracefully...');
+  process.exit(0);
+});
+
+// Call before startServer()
+runSetup().then(() => startServer());
+
