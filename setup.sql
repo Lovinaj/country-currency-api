@@ -1,12 +1,6 @@
 -- setup.sql - Database Setup Script
 -- Run this file to create the database and tables
 
--- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS countries_db;
-
--- Use the database
-USE countries_db;
-
 -- Create countries table
 CREATE TABLE IF NOT EXISTS countries (
   id INT AUTO_INCREMENT PRIMARY KEY,
