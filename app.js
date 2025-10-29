@@ -54,7 +54,7 @@ app.use((req, res) => {
 
 // Global error handler - Catches any unexpected errors
 app.use((err, req, res, next) => {
-  console.error('❌ Unexpected error:', err);
+  console.error('Unexpected error:', err);
   res.status(500).json({ 
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
