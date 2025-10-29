@@ -1,6 +1,15 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
+// ADD THESE DEBUG LINES HERE:
+console.log('=== ENVIRONMENT CHECK ===');
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_PORT:', process.env.DB_PORT);
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD ? '***SET***' : 'MISSING');
+console.log('========================');
 const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
