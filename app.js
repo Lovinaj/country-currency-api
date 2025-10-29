@@ -64,7 +64,7 @@ app.use((err, req, res, next) => {
 async function startServer() {
   try {
     // First, test if database connection works
-    console.log('🔄 Testing database connection...');
+    console.log('Testing database connection...');
     await testConnection();
     
     //Then start listening for requests

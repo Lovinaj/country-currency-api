@@ -3,3 +3,5 @@ node_modules
 cache/*.png
 *.log
 .DS_Store
+check-tables.js
+test-db.js

@@ -17,7 +17,7 @@ function randomBetween(min, max) {
 // 1. REFRESH DATA - Fetch from external APIs and save to database
 async function refreshCountries(req, res) {
   try {
-    console.log('🔄 Starting data refresh...');
+    console.log('Starting data refresh...');
     
     // Step 1: Fetch countries data
     // const countriesResponse = await axios.get(COUNTRIES_API, { timeout: 15000 });
@@ -26,7 +26,7 @@ async function refreshCountries(req, res) {
     try {
       countriesResponse = await axios.get(COUNTRIES_API, { timeout: 15000 });
     } catch (err) {
-      console.error('🔴 Countries API failed:', err.code || err.message);
+      console.error(' Countries API failed:', err.code || err.message);
       throw new Error(`Failed to fetch from ${COUNTRIES_API}`);
     }
 
@@ -35,7 +35,7 @@ async function refreshCountries(req, res) {
     try {
       exchangeResponse = await axios.get(EXCHANGE_API, { timeout: 30000 });
     } catch (err) {
-      console.error('🔴 Exchange API failed:', err.code || err.message);
+      console.error('Exchange API failed:', err.code || err.message);
       throw new Error(`Failed to fetch from ${EXCHANGE_API}`);
     }
 
@@ -47,7 +47,7 @@ async function refreshCountries(req, res) {
     // const exchangeResponse = await axios.get(EXCHANGE_API, { timeout: 15000 });
     // const exchangeRates = exchangeResponse.data.rates;
     
-    console.log(`📊 Fetched ${countries.length} countries and ${Object.keys(exchangeRates).length} exchange rates`);
+    console.log(` Fetched ${countries.length} countries and ${Object.keys(exchangeRates).length} exchange rates`);
     
     // Step 3: Process each country
     let successCount = 0;
